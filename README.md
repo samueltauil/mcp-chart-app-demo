@@ -63,6 +63,57 @@ For integration with MCP hosts that use stdio:
 node dist/server.js --stdio
 ```
 
+### Expose Publicly with Cloudflared
+
+For demos or testing with remote MCP clients, you can expose your local server via a public URL using [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/).
+
+#### Prerequisites
+
+Install cloudflared:
+
+- **macOS**: `brew install cloudflared`
+- **Windows**: `winget install --id Cloudflare.cloudflared`
+- **Linux**: See [cloudflared downloads](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+
+#### Run Server with Public Tunnel
+
+Start the server and tunnel together:
+
+```bash
+npm run public
+```
+
+This runs both `npm run serve` and `npm run tunnel` concurrently. The terminal will display a public URL like:
+
+```
+Your quick Tunnel has been created! Visit it at:
+https://random-subdomain.trycloudflare.com
+```
+
+#### Run Tunnel Separately
+
+If you already have the server running, start just the tunnel:
+
+```bash
+npm run tunnel
+```
+
+#### Using the Public URL
+
+Configure your remote MCP client with the tunnel URL:
+
+```json
+{
+  "mcpServers": {
+    "chart-app": {
+      "url": "https://random-subdomain.trycloudflare.com/mcp"
+    }
+  }
+}
+```
+
+> **Note**: The tunnel URL changes each time you restart. For persistent URLs, consider setting up a [named tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-tunnel/) with Cloudflare.
+
 ## Usage
 
 ### Tool: `display-chart`
