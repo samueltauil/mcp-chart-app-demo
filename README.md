@@ -114,6 +114,50 @@ Configure your remote MCP client with the tunnel URL:
 
 > **Note**: The tunnel URL changes each time you restart. For persistent URLs, consider setting up a [named tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-tunnel/) with Cloudflare.
 
+#### Configure in VS Code
+
+After starting the server with cloudflared, follow these steps to add it to VS Code:
+
+1. **Copy the tunnel URL** from the terminal output (e.g., `https://random-subdomain.trycloudflare.com`)
+
+2. **Open VS Code Settings**
+   - Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS)
+   - Type "Preferences: Open User Settings (JSON)" and select it
+
+3. **Add the MCP server configuration** to your `settings.json`:
+
+   ```json
+   {
+     "mcp": {
+       "servers": {
+         "chart-app": {
+           "url": "https://random-subdomain.trycloudflare.com/mcp"
+         }
+       }
+     }
+   }
+   ```
+
+4. **Alternatively, use the MCP: Add Server command**
+   - Press `Ctrl+Shift+P` / `Cmd+Shift+P`
+   - Type "MCP: Add Server" and select it
+   - Choose "HTTP" as the transport type
+   - Enter a name (e.g., `chart-app`)
+   - Paste the full URL: `https://random-subdomain.trycloudflare.com/mcp`
+
+5. **Verify the connection**
+   - Open GitHub Copilot Chat
+   - The `display-chart` tool should now be available
+   - Try asking: "Pull data from my GitHub account usage metrics and display in a pie chart"
+   
+   > **Note**: This example requires the [GitHub MCP Server](https://github.com/github/github-mcp-server) to also be configured and running. The GitHub MCP Server retrieves the account data, and then the Chart App is called to visualize it. This demonstrates how multiple MCP servers can work together—one for data retrieval, another for presentation.
+
+#### Troubleshooting
+
+- **Server not connecting**: Ensure both the server (`npm run serve`) and tunnel (`npm run tunnel`) are running
+- **URL changed**: If you restarted the tunnel, update the URL in VS Code settings
+- **Tool not appearing**: Reload VS Code window (`Ctrl+Shift+P` → "Developer: Reload Window")
+
 ## Usage
 
 ### Tool: `display-chart`
